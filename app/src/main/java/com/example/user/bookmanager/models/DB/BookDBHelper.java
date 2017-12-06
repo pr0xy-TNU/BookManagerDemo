@@ -17,15 +17,23 @@ public class BookDBHelper extends SQLiteOpenHelper {
   private final String TABLE_COMPANY = "companyes";
   private final int DB_VERSION = 1;
 
-  public static final String TABLE_BOOK_CREATE
+  public final String TABLE_BOOK_CREATE
       = String.format("CREATE %s ("
       + "book_id INTEGER PRIMARY KEY, "
       + "book_name TEXT, "
-      + "book_author INTEGER NOT NULL,"
-      + "book_company INTEGER NOT NULL"
-      + "FOREIGN KEY(book_name) REFERENCE )");
-  public static final String TABLE_AUTHOR_CREATE = "ASD";
-  public static final String TABLE_COMPANY_CREATE = "ASD";
+      + "book_author TEXT NOT NULL,"
+      + "book_company INTEGER NOT NULL);", TABLE_BOOK);
+
+  public final String TABLE_AUTHOR_CREATE
+      = String.format("CREATE %s ("
+      + "author_id INTEGER PRIMARY KEY, "
+      + "author_name TEXT, "
+      + "author_year INTEGER NOT NULL);", TABLE_AUTHOR);
+
+  public final String TABLE_COMPANY_CREATE
+      = String.format("CREATE %s ("
+      + "company_id INTEGER PRIMARY KEY"
+      + "company_name TEXT NOT NULL);", TABLE_COMPANY);
 
   public BookDBHelper(Context context, String name,
       CursorFactory factory, int version) {
