@@ -13,16 +13,17 @@ public class Company {
     return _id;
   }
 
-  private String getName() {
+  public String getName() {
     return name;
   }
 
-  private void setName(String name) {
+  public void setName(String name) {
     this.name = name;
   }
 
-  private Company(String name) {
+  public Company(int id, String name) {
 
     this.name = name;
+    this._id = id;
   }
 }

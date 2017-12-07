@@ -5,36 +5,39 @@ package com.example.user.bookmanager.models.entityes;
  */
 
 public class Author {
+
   private int _id;
   private String name;
   private int yearOld;
 
-  private void set_id(int _id) {
+  public void set_id(int _id) {
     this._id = _id;
   }
 
-  private void setName(String name) {
+
+  public void setName(String name) {
     this.name = name;
   }
 
-  private void setYearOld(int yearOld) {
+  public void setYearOld(int yearOld) {
     this.yearOld = yearOld;
   }
 
-  private int get_id() {
+  public int get_id() {
 
     return _id;
   }
 
-  private String getName() {
+  public String getName() {
     return name;
   }
 
-  private int getYearOld() {
+  public int getYearOld() {
     return yearOld;
   }
 
-  private Author(String name, int yearOld) {
+  public Author(int id, String name, int yearOld) {
+    this._id = id;
     this.name = name;
     this.yearOld = yearOld;
 

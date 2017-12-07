@@ -8,62 +8,73 @@ public class Book {
 
   private int _id;
   private String name;
-  private Author author;
+  private int companyId;
+  private String year;
+  private int authorId;
+
   private int date;
 
-  private Book(String name) {
+  public Book(String name) {
     this.name = name;
   }
 
-  private void set_id(int _id) {
+  public void set_id(int _id) {
     this._id = _id;
   }
 
-  private void setName(String name) {
+  public Book(String name, String year) {
+    this.name = name;
+    this.year = year;
+  }
+
+  public void setName(String name) {
     this.name = name;
   }
 
-  private void setAuthor(Author author) {
-    this.author = author;
+  private void setCompanyId(int companyId) {
+    this.companyId = companyId;
   }
 
-  private void setDate(int date) {
+  public void setYear(String year) {
+    this.year = year;
+  }
+
+  public void setAuthorId(int authorId) {
+    this.authorId = authorId;
+  }
+
+  public int getCompanyId() {
+
+    return companyId;
+  }
+
+  public String getYear() {
+    return year;
+  }
+
+  public int getAuthorId() {
+    return authorId;
+  }
+
+  public void setDate(int date) {
     this.date = date;
   }
 
-  private void setCompany(Company company) {
-    mCompany = company;
-  }
 
-  private int get_id() {
+  public int get_id() {
 
     return _id;
   }
 
-  private String getName() {
+  public String getName() {
     return name;
   }
 
-  private Author getAuthor() {
-    return author;
-  }
 
-  private int getDate() {
+  public int getDate() {
     return date;
   }
 
-  private Company getCompany() {
-    return mCompany;
-  }
 
-  private Book(String name, Author author,
-      Company company) {
-
-    this.name = name;
-    this.author = author;
-    mCompany = company;
-  }
-
-  private Company mCompany;
 
 }
