@@ -2,8 +2,9 @@ package com.example.user.bookmanager.models.DB;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import com.example.user.bookmanager.utils.Utilites;
 
 /**
  * Created by user on 06.12.17.
@@ -11,37 +12,71 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class BookDBHelper extends SQLiteOpenHelper {
 
-  private final String DB_NAME = "books_db";
-  private final String TABLE_AUTHOR = "authors";
-  private final String TABLE_BOOK = "books";
-  private final String TABLE_COMPANY = "companyes";
-  private final int DB_VERSION = 1;
+  /**
+   * DataBase info
+   */
+  private static final String DB_NAME = "books_db";
+  private static final int DB_VERSION = 1;
 
-  public final String TABLE_BOOK_CREATE
-      = String.format("CREATE %s ("
-      + "book_id INTEGER PRIMARY KEY, "
-      + "book_name TEXT, "
-      + "book_author TEXT NOT NULL,"
-      + "book_company INTEGER NOT NULL);", TABLE_BOOK);
+  /**
+   * Author table columns
+   */
+  private final String TABLE_AUTHOR =      "authors";
+  private final String TABLE_AUTHOR_ID =   "author_id";
+  private final String TABLE_AUTHOR_NAME = "author_name";
+  private final String TABLE_AUTHOR_YEAR = "author_year";
 
-  public final String TABLE_AUTHOR_CREATE
-      = String.format("CREATE %s ("
-      + "author_id INTEGER PRIMARY KEY, "
-      + "author_name TEXT, "
-      + "author_year INTEGER NOT NULL);", TABLE_AUTHOR);
+  /**
+   * Books table columns
+   */
+  private final String TABLE_BOOK =            "books";
+  private final String TABLE_BOOK_ID =         "book_id";
+  private final String TABLE_BOOK_NAME =       "book_name";
+  private final String TABLE_BOOK_YEAR =       "book_year";
+  private final String TABLE_BOOK_FK_AUTHOR =  "author_id";
+  private final String TABLE_BOOK_FK_COMPANY = "company_id";
 
-  public final String TABLE_COMPANY_CREATE
-      = String.format("CREATE %s ("
-      + "company_id INTEGER PRIMARY KEY"
-      + "company_name TEXT NOT NULL);", TABLE_COMPANY);
+  /**
+   * Company table columns
+   */
+  private final String TABLE_COMPANY =      "companyes";
+  private final String TABLE_COMPANY_ID =   "company_id";
+  private final String TABLE_COMPANY_NAME = "company_name";
 
-  public BookDBHelper(Context context, String name,
-      CursorFactory factory, int version) {
-    super(context, name, factory, version);
+
+  public final String SQL_CREATE_TABLE_BOOK
+      ="CREATE TABLE IF NOT EXISTS " + TABLE_BOOK + "("
+      + TABLE_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+      + TABLE_BOOK_NAME + " TEXT, "
+      + TABLE_BOOK_YEAR + " TEXT, "
+      + TABLE_BOOK_FK_AUTHOR + " INTEGER, "
+      + TABLE_BOOK_FK_COMPANY + " INTEGER, "
+      + "FOREIGN KEY("+ TABLE_BOOK_FK_AUTHOR + ") REFERENCES " + TABLE_AUTHOR +"(" + TABLE_AUTHOR_ID + ")"
+      + "FOREIGN KEY("+ TABLE_BOOK_FK_COMPANY + ") REFERENCES " + TABLE_COMPANY +"(" + TABLE_COMPANY_ID + ")"
+      + ");";
+
+  public final String SQL_CREATE_TABLE_AUTHOR
+      = "CREATE TABLE IF NOT EXISTS " + TABLE_AUTHOR + "("
+      + TABLE_AUTHOR_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+      + TABLE_AUTHOR_NAME + " TEXT NOT NULL,"
+      + TABLE_AUTHOR_YEAR + "INTEGER NOT NULL"
+      + ");";
+
+  public final String SQL_CREATE_TABLE_COMPANY
+      = "CREATE TABLE IF NOT EXISTS " + TABLE_COMPANY + "("
+      + TABLE_COMPANY_ID + "INTEGER PRIMARY KEY AUTOINCREMENT,"
+      + TABLE_COMPANY_NAME + "TEXT"
+      +");";
+
+  public BookDBHelper(Context context) {
+    super(context, DB_NAME, null, DB_VERSION);
   }
+
 
   @Override
   public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
+    Log.d(Utilites.LOG_TAG, "");
 
   }
 
