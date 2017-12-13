@@ -6,11 +6,23 @@ package com.example.user.bookmanager.utils;
 
 public interface Utils {
 
+
+  /**
+   * Logs problems
+   *
+   */
   String LOG_TAG = "LOG";
   String OPERATION_STATUS_SUCCESSFULLY = "SUCCSESSFULLY";
   String OPERATION_STATUS_ERROR = "ERROR";
   String OPERATION_STATUS_DATA_NOT_ADD = "Data" + OPERATION_STATUS_SUCCESSFULLY + " added!";
   String OPERATION_STATUS_DATA_NOT_FOUND = "Sorry, but data, which you search was not found or some problem with database";
+  String DATABASE_QUERY_ERROR = "Database dont consists data or wrong query";
+
+  /**
+   *
+   *  DataBase info
+   */
+
   String DB_NAME = "books_db";
   int DB_VERSION = 1;
 
@@ -38,4 +50,5 @@ public interface Utils {
   String TABLE_COMPANY = "companyes";
   String TABLE_COMPANY_ID = "company_id";
   String TABLE_COMPANY_NAME = "company_name";
+
 }

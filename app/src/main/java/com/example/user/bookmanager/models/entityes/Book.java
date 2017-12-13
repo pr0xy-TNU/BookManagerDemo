@@ -8,11 +8,10 @@ public class Book {
 
   private int _id;
   private String name;
-  private int companyId;
-  private String year;
   private int authorId;
+  private int year;
+  private int companyId;
 
-  private int date;
 
   public Book(String name) {
     this.name = name;
@@ -22,9 +21,25 @@ public class Book {
     this._id = _id;
   }
 
-  public Book(String name, String year) {
+  public Book(String name, int year) {
     this.name = name;
     this.year = year;
+  }
+
+  public Book(int _id, String name, int authorId, int year, int companyId) {
+    this._id = _id;
+    this.name = name;
+    this.authorId = authorId;
+    this.year = year;
+    this.companyId = companyId;
+
+  }
+  public Book(String name, int authorId, int year, int companyId) {
+    this.name = name;
+    this.authorId = authorId;
+    this.year = year;
+    this.companyId = companyId;
+
   }
 
   public void setName(String name) {
@@ -35,7 +50,7 @@ public class Book {
     this.companyId = companyId;
   }
 
-  public void setYear(String year) {
+  public void setYear(int year) {
     this.year = year;
   }
 
@@ -48,7 +63,7 @@ public class Book {
     return companyId;
   }
 
-  public String getYear() {
+  public long getYear() {
     return year;
   }
 
@@ -56,9 +71,7 @@ public class Book {
     return authorId;
   }
 
-  public void setDate(int date) {
-    this.date = date;
-  }
+
 
 
   public int get_id() {
@@ -71,10 +84,18 @@ public class Book {
   }
 
 
-  public int getDate() {
-    return date;
+
+  @Override
+  public String toString() {
+    return "Book{" +
+        "_id=" + _id +
+        "\t, name='" + name + '\'' +
+        "\t, authorId=" + authorId +
+        "\t, year=" + year +
+        "\t, companyId=" + companyId +
+        '}';
   }
-
-
-
+  public String getBookInfo(){
+    return this.toString();
+  }
 }

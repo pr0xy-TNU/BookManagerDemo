@@ -1,3 +1,7 @@
 <resources>
   <string name="app_name">BookManager</string>
+  <string name="btn_books">Books</string>
+  <string name="btn_companyes">Companyes</string>
+  <string name="btn_authors">Authors</string>
+  <string name="btn_find">Find</string>
 </resources>

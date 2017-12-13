@@ -36,10 +36,28 @@ public class Author {
     return yearOld;
   }
 
+  public Author(String name, int yearOld) {
+    this.name = name;
+    this.yearOld = yearOld;
+  }
+
   public Author(int id, String name, int yearOld) {
     this._id = id;
     this.name = name;
     this.yearOld = yearOld;
 
+  }
+
+  @Override
+  public String toString() {
+    return "Author{" +
+        "_id=" + _id +
+        "\t, name='" + name + '\'' +
+        "\t, yearOld=" + yearOld +
+        '}';
+  }
+
+  public String getAuthorInfo() {
+    return this.toString();
   }
 }

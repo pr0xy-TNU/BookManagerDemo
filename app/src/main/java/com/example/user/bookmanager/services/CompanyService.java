@@ -25,48 +25,51 @@ public class CompanyService extends BaseService {
 
   public void addCompany(Company company) {
     SQLiteDatabase database = getHelper().getWritableDatabase();
-
     database.beginTransaction();
     try {
       ContentValues cv = new ContentValues();
-      cv.put(Utils.TABLE_COMPANY, company.getName());
-      database.insertOrThrow(Utils.TABLE_COMPANY, null, cv);
+      cv.put(Utils.TABLE_COMPANY_NAME, company.getName());
+      database.insertOrThrow(TABLE_COMPANY, null, cv);
       database.setTransactionSuccessful();
     } catch (Exception e) {
-      Log.d(Utils.OPERATION_STATUS_ERROR, "Error to add data to table ->" + TABLE_COMPANY);
+      Log.i(Utils.LOG_TAG, "Error to add data to table ->" + TABLE_COMPANY);
     } finally {
       database.endTransaction();
       database.close();
     }
   }
 
-  @SuppressLint("DefaultLocale")
+  public void addCompany(List<Company> company) {
+    for (Company item : company
+    ) {
+      addCompany(item);
+    }
+  }
+
+
   public List<Company> getAllCompanyes() {
     SQLiteDatabase database = getHelper().getWritableDatabase();
-    database.beginTransaction();
     List<Company> companyList = new ArrayList<>();
     Company temp;
-    String consoleInfo = null;
     try {
       Cursor cursor = database.query(Utils.TABLE_COMPANY, null, null, null, null, null, null);
       if (cursor.moveToFirst()) {
-        int id = cursor.getColumnIndex(Utils.TABLE_COMPANY_ID);
-        int name = cursor.getColumnIndex(Utils.TABLE_COMPANY_NAME);
+        int idColumnIndex = cursor.getColumnIndex(Utils.TABLE_COMPANY_ID);
+        int nameColumnIndex = cursor.getColumnIndex(Utils.TABLE_COMPANY_NAME);
         do {
-          temp = new Company(cursor.getInt(id),
-              cursor.getString(name));
+          int id = cursor.getInt(idColumnIndex);
+          String name = cursor.getString(nameColumnIndex);
+
+          temp = new Company(id,
+              name);
           companyList.add(temp);
-          consoleInfo = String.format("%d%s",
-              cursor.getInt(id),
-              cursor.getString(name));
-              Log.d(Utils.LOG_TAG, consoleInfo);
         } while (cursor.moveToNext());
       } else {
-        Log.d(Utils.LOG_TAG, Utils.OPERATION_STATUS_DATA_NOT_FOUND);
+        Log.i(Utils.LOG_TAG, Utils.DATABASE_QUERY_ERROR);
       }
     } catch (Exception e) {
-      Log.d(Utils.OPERATION_STATUS_ERROR,
-          "Error to get all data fro table ->" + Utils.TABLE_AUTHOR);
+      Log.i(Utils.LOG_TAG,
+          "Error to get all data fro table ->" + Utils.TABLE_COMPANY);
     }
     return companyList;
   }

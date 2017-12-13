@@ -9,7 +9,7 @@ public class Company {
   private int _id;
   private String name;
 
-  private int get_id() {
+  public int get_id() {
     return _id;
   }
 
@@ -21,9 +21,24 @@ public class Company {
     this.name = name;
   }
 
+  public Company(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return "Company{" +
+        "_id=" + _id +
+        ", name='" + name + '\'' +
+        '}';
+  }
+
   public Company(int id, String name) {
 
     this.name = name;
     this._id = id;
+  }
+  public String getCompanyInfo(){
+    return this.toString();
   }
 }
