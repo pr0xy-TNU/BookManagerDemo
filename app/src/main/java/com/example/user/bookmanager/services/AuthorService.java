@@ -17,13 +17,15 @@ import java.util.List;
 
 public class AuthorService extends BaseService {
 
+  private SQLiteDatabase dataBase;
+
 
   public AuthorService(Context context) {
     super(context);
   }
 
   public void addAuthor(Author author) {
-    SQLiteDatabase dataBase = getHelper().getWritableDatabase();
+    dataBase = getHelper().getWritableDatabase();
 
     dataBase.beginTransaction();
     try {
@@ -52,11 +54,11 @@ public class AuthorService extends BaseService {
 
   @SuppressLint("DefaultLocale")
   public List<Author> getAllAuthors() {
-    SQLiteDatabase database = getHelper().getWritableDatabase();
+    dataBase = getHelper().getWritableDatabase();
     List<Author> authorList = new ArrayList<>();
     Author temp;
     try {
-      Cursor cursor = database.query(Utils.TABLE_AUTHOR, null, null, null, null, null, null);
+      Cursor cursor = dataBase.query(Utils.TABLE_AUTHOR, null, null, null, null, null, null);
       if (cursor.moveToFirst()) {
 
         int idColumnIndex = cursor.getColumnIndex(Utils.TABLE_AUTHOR_ID);
@@ -83,4 +85,23 @@ public class AuthorService extends BaseService {
     return authorList;
   }
 
+  public Author getAuthorById(int author_id) {
+    Author tempAuthor = new Author();
+    dataBase = getHelper().getReadableDatabase();
+    @SuppressLint("DefaultLocale") String sqlQuery = String
+        .format("select * from %s where %s.%s = %d", Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR,
+            Utils.TABLE_AUTHOR_ID, author_id);
+    Cursor cursor = dataBase.rawQuery(sqlQuery, null);
+    if (cursor.moveToNext()){
+      int authorIdIndexColumn = cursor.getColumnIndex(Utils.TABLE_AUTHOR_ID);
+      int authorNameColumnIndex = cursor.getColumnIndex(Utils.TABLE_AUTHOR_NAME);
+      int authorYearIndexColumn = cursor.getColumnIndex(Utils.TABLE_AUTHOR_YEAR);
+      tempAuthor.set_id(cursor.getInt(authorIdIndexColumn));
+      tempAuthor.setName(cursor.getString(authorNameColumnIndex));
+      tempAuthor.setYearOld(cursor.getInt(authorYearIndexColumn));
+    }else {
+      tempAuthor = null;
+    }
+    return tempAuthor;
+  }
 }

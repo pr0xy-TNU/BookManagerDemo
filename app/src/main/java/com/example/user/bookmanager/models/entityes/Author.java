@@ -36,6 +36,9 @@ public class Author {
     return yearOld;
   }
 
+  public Author() {
+  }
+
   public Author(String name, int yearOld) {
     this.name = name;
     this.yearOld = yearOld;

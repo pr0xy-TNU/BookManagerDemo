@@ -21,6 +21,9 @@ public class Company {
     this.name = name;
   }
 
+  public Company() {
+  }
+
   public Company(String name) {
     this.name = name;
   }
@@ -40,5 +43,9 @@ public class Company {
   }
   public String getCompanyInfo(){
     return this.toString();
+  }
+
+  public void set_id(int _id) {
+    this._id = _id;
   }
 }

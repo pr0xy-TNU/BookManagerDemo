@@ -24,6 +24,11 @@ public class BookService extends BaseService {
     super(context);
   }
 
+
+  /**
+   * Adding book to database
+   * @param book
+   */
   public void addBook(Book book) {
 
     SQLiteDatabase dataBase = getHelper().getWritableDatabase();
@@ -54,6 +59,11 @@ public class BookService extends BaseService {
     }
   }
 
+  /**
+   * Return all books from database
+   *
+   * @return
+   */
   public List<Book> getAllBooks() {
     SQLiteDatabase db = getHelper().getReadableDatabase();
     List<Book> bookList = new ArrayList<>();
@@ -89,19 +99,20 @@ public class BookService extends BaseService {
     return bookList;
   }
 
-
   /**
    * Return book with full author and company attributes
    */
-  public BookAdvanced getFullBook(Book book) {
+  public BookAdvanced getFullBookById(int book_id) {
 
     BookAdvanced tempBook = new BookAdvanced();
     Author tempAuthor;
     Company tempCompany;
 
+
+    SQLiteDatabase db = getHelper().getReadableDatabase();
+   /*
     int author_id = book.getAuthorId();
     int company_id = book.getCompanyId();
-    SQLiteDatabase db = getHelper().getReadableDatabase();
     @SuppressLint("DefaultLocale") String query = String.format(
         "select " +
             "\n%s.%s, " +
@@ -130,22 +141,36 @@ public class BookService extends BaseService {
         Utils.TABLE_BOOK_FK_COMPANY,
         Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_ID, company_id,
         Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_ID, author_id
+    );*/
+    @SuppressLint("DefaultLocale") String query = String.format(
+        "select " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s "
+            + "\nfrom %s \n"
+            + "inner join %s on %s.%s = %s.%s\n"
+            + "inner join %s on %s.%s = %s.%s\n"
+            + "where %s.%s = %d",
+        Utils.TABLE_BOOK, Utils.TABLE_BOOK_ID, Utils.TABLE_BOOK, Utils.TABLE_BOOK_NAME,
+        Utils.TABLE_BOOK, Utils.TABLE_BOOK_YEAR,
+        Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_NAME,
+        Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_ID,
+        Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_NAME,
+        Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_ID,
+        Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_YEAR,
+        Utils.TABLE_BOOK,
+        Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_ID, Utils.TABLE_BOOK,
+        Utils.TABLE_BOOK_FK_AUTHOR,
+        Utils.TABLE_COMPANY, Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_ID, Utils.TABLE_BOOK,
+        Utils.TABLE_BOOK_FK_COMPANY,
+        Utils.TABLE_BOOK, Utils.TABLE_BOOK_ID, book_id
     );
-    /* Example
-    * select
-        books.book_id,
-        books.book_name,
-        books.book_year,
-        companyes.company_name,
-        companyes.company_id,
-        authors.author_name,
-        authors.author_id,
-        authors.author_year
-      from books
-        inner join authors on authors.author_id = books.author_id
-        inner join companyes on companyes.company_id = books.company_id
-      where companyes.company_id = 2 and authors.author_id = 2
-    * */
+
     Cursor cursor = db.rawQuery(query, null);
     if (cursor.moveToFirst()) {
       int bookIdColumnIndex = cursor.getColumnIndex(Utils.TABLE_BOOK_ID);
@@ -186,9 +211,8 @@ public class BookService extends BaseService {
     } else {
       Log.i(Utils.LOG_TAG, "getFullBook: There is no matches in book...");
     }
-    //Log.i(Utils.LOG_TAG, "getFullBook: " + tempBook.getBookAndvencadInfo());
+    Log.i(Utils.LOG_TAG, "getFullBook: " + tempBook.getBookAndvencadInfo());
     return tempBook;
   }
-
 
 }

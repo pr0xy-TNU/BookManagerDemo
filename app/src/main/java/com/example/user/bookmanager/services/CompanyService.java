@@ -19,40 +19,42 @@ import java.util.List;
 
 public class CompanyService extends BaseService {
 
+  private SQLiteDatabase dataBase;
+
   public CompanyService(Context context) {
     super(context);
   }
 
   public void addCompany(Company company) {
-    SQLiteDatabase database = getHelper().getWritableDatabase();
-    database.beginTransaction();
+    dataBase = getHelper().getWritableDatabase();
+    dataBase.beginTransaction();
     try {
       ContentValues cv = new ContentValues();
       cv.put(Utils.TABLE_COMPANY_NAME, company.getName());
-      database.insertOrThrow(TABLE_COMPANY, null, cv);
-      database.setTransactionSuccessful();
+      dataBase.insertOrThrow(TABLE_COMPANY, null, cv);
+      dataBase.setTransactionSuccessful();
     } catch (Exception e) {
       Log.i(Utils.LOG_TAG, "Error to add data to table ->" + TABLE_COMPANY);
     } finally {
-      database.endTransaction();
-      database.close();
+      dataBase.endTransaction();
+      dataBase.close();
     }
   }
 
   public void addCompany(List<Company> company) {
     for (Company item : company
-    ) {
+        ) {
       addCompany(item);
     }
   }
 
 
   public List<Company> getAllCompanyes() {
-    SQLiteDatabase database = getHelper().getWritableDatabase();
+    dataBase = getHelper().getWritableDatabase();
     List<Company> companyList = new ArrayList<>();
     Company temp;
     try {
-      Cursor cursor = database.query(Utils.TABLE_COMPANY, null, null, null, null, null, null);
+      Cursor cursor = dataBase.query(Utils.TABLE_COMPANY, null, null, null, null, null, null);
       if (cursor.moveToFirst()) {
         int idColumnIndex = cursor.getColumnIndex(Utils.TABLE_COMPANY_ID);
         int nameColumnIndex = cursor.getColumnIndex(Utils.TABLE_COMPANY_NAME);
@@ -72,6 +74,25 @@ public class CompanyService extends BaseService {
           "Error to get all data fro table ->" + Utils.TABLE_COMPANY);
     }
     return companyList;
+  }
+
+  public Company getCompanyById(int company_id) {
+    Company tempCompany = new Company();
+    dataBase = getHelper().getReadableDatabase();
+    @SuppressLint("DefaultLocale") String sqlQuery = String
+        .format("select * from %s where %s.%s = %d", Utils.TABLE_COMPANY, Utils.TABLE_COMPANY,
+            Utils.TABLE_COMPANY_ID, company_id);
+    Cursor cursor = dataBase.rawQuery(sqlQuery, null);
+    if (cursor.moveToNext()) {
+      int companyIdIndexColumn = cursor.getColumnIndex(Utils.TABLE_COMPANY_ID);
+      int companyNameColumnIndex = cursor.getColumnIndex(Utils.TABLE_COMPANY_NAME);
+      tempCompany.set_id(cursor.getInt(companyIdIndexColumn));
+      tempCompany.setName(cursor.getString(companyNameColumnIndex));
+    } else {
+      tempCompany = null;
+      Log.i(Utils.LOG_TAG, "getAuthorById: " + Utils.DATABASE_NO_SUCH_RECORD);
+    }
+    return tempCompany;
   }
 
 }
