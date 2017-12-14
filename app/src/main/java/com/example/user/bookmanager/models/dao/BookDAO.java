@@ -1,4 +1,4 @@
-package com.example.user.bookmanager.services;
+package com.example.user.bookmanager.models.dao;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -18,9 +18,9 @@ import java.util.List;
  * Created by user on 07.12.17.
  */
 
-public class BookService extends BaseService {
+public class BookDAO extends BaseDAO {
 
-  public BookService(Context context) {
+  public BookDAO(Context context) {
     super(context);
   }
 
@@ -210,8 +210,10 @@ public class BookService extends BaseService {
       } while (cursor.moveToNext());
     } else {
       Log.i(Utils.LOG_TAG, "getFullBook: There is no matches in book...");
+      tempBook = null;
     }
-    Log.i(Utils.LOG_TAG, "getFullBook: " + tempBook.getBookAndvencadInfo());
+   // Log.i(Utils.LOG_TAG, "getFullBook: " + tempBook.getBookAndvencadInfo());
+
     return tempBook;
   }
 

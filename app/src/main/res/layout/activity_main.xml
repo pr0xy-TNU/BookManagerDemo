@@ -48,12 +48,12 @@
       android:layout_width="100dp"
       android:layout_height="wrap_content"
       android:text="Search"
-      android:inputType="numberDecimal"
       android:textSize="24sp"/>
     <EditText
       android:id="@+id/tvFindField"
       android:layout_width="200dp"
-      android:layout_height="wrap_content"/>
+      android:layout_height="wrap_content"
+      android:inputType="numberDecimal"/>
     <Button
       android:id="@+id/btnFind"
       android:layout_width="wrap_content"

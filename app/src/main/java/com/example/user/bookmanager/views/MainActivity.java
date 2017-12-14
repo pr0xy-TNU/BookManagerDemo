@@ -12,9 +12,10 @@ import com.example.user.bookmanager.models.entityes.Author;
 import com.example.user.bookmanager.models.entityes.Book;
 import com.example.user.bookmanager.models.entityes.BookAdvanced;
 import com.example.user.bookmanager.models.entityes.Company;
-import com.example.user.bookmanager.services.AuthorService;
-import com.example.user.bookmanager.services.BookService;
-import com.example.user.bookmanager.services.CompanyService;
+
+import com.example.user.bookmanager.models.dao.AuthorDAO;
+import com.example.user.bookmanager.models.dao.BookDAO;
+import com.example.user.bookmanager.models.dao.CompanyDAO;
 import com.example.user.bookmanager.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +27,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
   private List<Author> mAuthorList;
   private List<Company> mCompanyList;
   private Random mRandom = new Random();
-  private AuthorService mAuthorService;
-  private CompanyService mCompanyService;
-  private BookService mBookService;
+  private AuthorDAO mAuthorService;
+  private CompanyDAO mCompanyService;
+  private BookDAO mBookService;
   private Button mButtonCompany;
   private Button mButtonAuthor;
   private Button mButtonBook;
@@ -40,9 +41,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    mAuthorService = new AuthorService(this);
-    mBookService = new BookService(this);
-    mCompanyService = new CompanyService(this);
+    mAuthorService = new AuthorDAO(this);
+    mBookService = new BookDAO(this);
+    mCompanyService = new CompanyDAO(this);
 
     mButtonCompany = findViewById(R.id.btnShowCompanyes);
     mButtonAuthor = findViewById(R.id.btnShowAuthors);
@@ -111,10 +112,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
       case R.id.btnFind:
         int bookId = Integer.parseInt(mEtFindFiled.getText().toString());
         BookAdvanced bookAdvanced = mBookService.getFullBookById(bookId);
-     /*   if (bookAdvanced == null){
+        if (bookAdvanced == null) {
           log(Utils.DATABASE_NO_SUCH_RECORD);
-        }*/
-
+        } else {
+          log(bookAdvanced.getBookAndvencadInfo());
+        }
         break;
     }
 

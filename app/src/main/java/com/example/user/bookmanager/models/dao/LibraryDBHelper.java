@@ -1,6 +1,4 @@
-package com.example.user.bookmanager.services;
-
-import static android.content.ContentValues.TAG;
+package com.example.user.bookmanager.models.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

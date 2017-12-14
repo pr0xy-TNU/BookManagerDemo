@@ -1,4 +1,4 @@
-package com.example.user.bookmanager.services;
+package com.example.user.bookmanager.models.dao;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -15,12 +15,12 @@ import java.util.List;
  * Created by user on 07.12.17.
  */
 
-public class AuthorService extends BaseService {
+public class AuthorDAO extends BaseDAO {
 
   private SQLiteDatabase dataBase;
 
 
-  public AuthorService(Context context) {
+  public AuthorDAO(Context context) {
     super(context);
   }
 

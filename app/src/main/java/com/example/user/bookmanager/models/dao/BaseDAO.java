@@ -1,4 +1,4 @@
-package com.example.user.bookmanager.services;
+package com.example.user.bookmanager.models.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,14 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
  * Created by user on 07.12.17.
  */
 
-class BaseService {
+class BaseDAO {
 
   private LibraryDBHelper mHelper;
   private SQLiteDatabase mDatabase;
   private Context mContext;
 
 
-  public BaseService(Context context) {
+  public BaseDAO(Context context) {
     this.mContext = context;
     mHelper = LibraryDBHelper.getInstance(context);
   }

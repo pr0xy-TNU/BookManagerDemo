@@ -1,4 +1,4 @@
-package com.example.user.bookmanager.services;
+package com.example.user.bookmanager.models.dao;
 
 import static com.example.user.bookmanager.utils.Utils.TABLE_COMPANY;
 
@@ -17,11 +17,11 @@ import java.util.List;
  * Created by user on 07.12.17.
  */
 
-public class CompanyService extends BaseService {
+public class CompanyDAO extends BaseDAO {
 
   private SQLiteDatabase dataBase;
 
-  public CompanyService(Context context) {
+  public CompanyDAO(Context context) {
     super(context);
   }
 
