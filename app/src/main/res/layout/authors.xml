@@ -8,30 +8,22 @@
     style="@style/ListView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
     <TextView
-      android:id="@+id/tvBookdId"
+      android:id="@+id/tvAuthorId"
       style="@style/ListView.Item"
-
+      android:layout_weight="1.5"
       android:text="@string/default_id"/>
     <TextView
-      android:id="@+id/tvBookName"
-
+      android:id="@+id/tvAuthorName"
       style="@style/ListView.Item"
-      android:text="@string/default_name"/>
+      android:text="@string/default_name"
+      />
     <TextView
-      android:id="@+id/tvBookAuthor"
+      android:id="@+id/tvAuthorYearOld"
       style="@style/ListView.Item"
-      android:text="@string/default_book_author"/>
-    <TextView
-      android:id="@+id/tvBookCompany"
-      style="@style/ListView.Item"
-      android:text="@string/default_book_company"/>
-    <TextView
-      android:id="@+id/tvBookYear"
-      style="@style/ListView.Item"
-      android:text="@string/default_book_years"/>
-
+      android:text="@string/default_years"/>
   </LinearLayout>
+
 
 </LinearLayout>

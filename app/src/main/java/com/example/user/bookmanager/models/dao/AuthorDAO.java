@@ -53,9 +53,9 @@ public class AuthorDAO extends BaseDAO {
   }
 
   @SuppressLint("DefaultLocale")
-  public List<Author> getAllAuthors() {
+  public ArrayList<Author> getAllAuthors() {
     dataBase = getHelper().getWritableDatabase();
-    List<Author> authorList = new ArrayList<>();
+    ArrayList<Author> authorList = new ArrayList<>();
     Author temp;
     try {
       Cursor cursor = dataBase.query(Utils.TABLE_AUTHOR, null, null, null, null, null, null);

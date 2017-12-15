@@ -7,15 +7,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import com.example.user.bookmanager.R;
+import com.example.user.bookmanager.adapters.AuthorAdapter;
+import com.example.user.bookmanager.adapters.BookAdapter;
+import com.example.user.bookmanager.adapters.CompanyAdapter;
+import com.example.user.bookmanager.models.dao.AuthorDAO;
+import com.example.user.bookmanager.models.dao.BookDAO;
+import com.example.user.bookmanager.models.dao.CompanyDAO;
 import com.example.user.bookmanager.models.entityes.Author;
 import com.example.user.bookmanager.models.entityes.Book;
 import com.example.user.bookmanager.models.entityes.BookAdvanced;
 import com.example.user.bookmanager.models.entityes.Company;
-
-import com.example.user.bookmanager.models.dao.AuthorDAO;
-import com.example.user.bookmanager.models.dao.BookDAO;
-import com.example.user.bookmanager.models.dao.CompanyDAO;
 import com.example.user.bookmanager.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,30 +29,35 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
   private List<Book> mBookList;
   private List<Author> mAuthorList;
   private List<Company> mCompanyList;
+
   private Random mRandom = new Random();
-  private AuthorDAO mAuthorService;
-  private CompanyDAO mCompanyService;
-  private BookDAO mBookService;
+
+  private AuthorDAO mAuthorDAO;
+  private CompanyDAO mCompanyDAO;
+  private BookDAO mBookDAO;
+
   private Button mButtonCompany;
   private Button mButtonAuthor;
   private Button mButtonBook;
   private Button mButtonFind;
   private EditText mEtFindFiled;
+  private ListView mListView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    mAuthorService = new AuthorDAO(this);
-    mBookService = new BookDAO(this);
-    mCompanyService = new CompanyDAO(this);
+    mAuthorDAO = new AuthorDAO(this);
+    mBookDAO = new BookDAO(this);
+    mCompanyDAO = new CompanyDAO(this);
 
     mButtonCompany = findViewById(R.id.btnShowCompanyes);
     mButtonAuthor = findViewById(R.id.btnShowAuthors);
     mButtonBook = findViewById(R.id.btnShowBooks);
     mEtFindFiled = findViewById(R.id.tvFindField);
     mButtonFind = findViewById(R.id.btnFind);
+    mListView = findViewById(R.id.lvMainActivity);
 
     mButtonCompany.setOnClickListener(this);
     mButtonBook.setOnClickListener(this);
@@ -89,29 +97,32 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
   public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btnShowCompanyes:
-        List<Company> tempCompanyList = mCompanyService.getAllCompanyes();
-        for (Company item : tempCompanyList) {
-          log(item.getCompanyInfo());
-        }
+        ArrayList<Company> tempCompanyList = mCompanyDAO.getAllCompanyes();
+        CompanyAdapter companyAdapter = new CompanyAdapter(this, tempCompanyList);
+        mListView.setAdapter(companyAdapter);
         break;
 
       case R.id.btnShowAuthors:
-        List<Author> tempAuthorList = mAuthorService.getAllAuthors();
-        for (Author item : tempAuthorList) {
-          log(item.getAuthorInfo());
-        }
+
+        ArrayList<Author> tempAuthorList = mAuthorDAO.getAllAuthors();
+        AuthorAdapter authorAdapter = new AuthorAdapter(this, tempAuthorList);
+        mListView.setAdapter(authorAdapter);
         break;
 
       case R.id.btnShowBooks:
-        List<Book> tempBookListBookList = mBookService.getAllBooks();
-        for (Book item : tempBookListBookList) {
-          log(item.getBookInfo());
+        ArrayList<BookAdvanced> tempBookListBookList = mBookDAO.getAllFullBooks();
+        for (BookAdvanced item : tempBookListBookList) {
+          log(item.getBookAndvencadInfo());
         }
+        BookAdapter adapter = new BookAdapter(this, mBookDAO.getAllFullBooks());
+        mListView.setAdapter(adapter);
+
+
         break;
 
       case R.id.btnFind:
         int bookId = Integer.parseInt(mEtFindFiled.getText().toString());
-        BookAdvanced bookAdvanced = mBookService.getFullBookById(bookId);
+        BookAdvanced bookAdvanced = mBookDAO.getFullBookById(bookId);
         if (bookAdvanced == null) {
           log(Utils.DATABASE_NO_SUCH_RECORD);
         } else {

@@ -27,7 +27,6 @@ public class BookDAO extends BaseDAO {
 
   /**
    * Adding book to database
-   * @param book
    */
   public void addBook(Book book) {
 
@@ -61,12 +60,10 @@ public class BookDAO extends BaseDAO {
 
   /**
    * Return all books from database
-   *
-   * @return
    */
-  public List<Book> getAllBooks() {
+  public ArrayList<Book> getAllBooks() {
     SQLiteDatabase db = getHelper().getReadableDatabase();
-    List<Book> bookList = new ArrayList<>();
+    ArrayList<Book> bookList = new ArrayList<>();
     try {
       Cursor cursor = db.query(Utils.TABLE_BOOK, null, null, null, null, null, null);
       if (cursor.moveToFirst()) {
@@ -102,17 +99,13 @@ public class BookDAO extends BaseDAO {
   /**
    * Return book with full author and company attributes
    */
-  public BookAdvanced getFullBookById(int book_id) {
-
-    BookAdvanced tempBook = new BookAdvanced();
+  public ArrayList<BookAdvanced> getAllFullBooks() {
+    BookAdvanced tempBook;
     Author tempAuthor;
     Company tempCompany;
-
-
+    ArrayList<BookAdvanced> bookList = new ArrayList<>();
     SQLiteDatabase db = getHelper().getReadableDatabase();
-   /*
-    int author_id = book.getAuthorId();
-    int company_id = book.getCompanyId();
+
     @SuppressLint("DefaultLocale") String query = String.format(
         "select " +
             "\n%s.%s, " +
@@ -122,12 +115,12 @@ public class BookDAO extends BaseDAO {
             "\n%s.%s, " +
             "\n%s.%s, " +
             "\n%s.%s, " +
-            "\n%s.%s "
+            "\n%s.%s  "
             + "\nfrom %s \n"
             + "inner join %s on %s.%s = %s.%s\n"
-            + "inner join %s on %s.%s = %s.%s\n"
-            + "where %s.%s = %d and %s.%s = %d",
-        Utils.TABLE_BOOK, Utils.TABLE_BOOK_ID, Utils.TABLE_BOOK, Utils.TABLE_BOOK_NAME,
+            + "inner join %s on %s.%s = %s.%s\n",
+        Utils.TABLE_BOOK, Utils.TABLE_BOOK_ID,
+        Utils.TABLE_BOOK, Utils.TABLE_BOOK_NAME,
         Utils.TABLE_BOOK, Utils.TABLE_BOOK_YEAR,
         Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_NAME,
         Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_ID,
@@ -138,10 +131,54 @@ public class BookDAO extends BaseDAO {
         Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_ID, Utils.TABLE_BOOK,
         Utils.TABLE_BOOK_FK_AUTHOR,
         Utils.TABLE_COMPANY, Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_ID, Utils.TABLE_BOOK,
-        Utils.TABLE_BOOK_FK_COMPANY,
-        Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_ID, company_id,
-        Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_ID, author_id
-    );*/
+        Utils.TABLE_BOOK_FK_COMPANY
+    );
+
+    Cursor cursor = db.rawQuery(query, null);
+    if (cursor.moveToFirst()) {
+      int bookIdColumnIndex = cursor.getColumnIndex(Utils.TABLE_BOOK_ID);
+      int bookNameColumnIndex = cursor.getColumnIndex(Utils.TABLE_BOOK_NAME);
+      int bookYearColumnIndex = cursor.getColumnIndex(Utils.TABLE_BOOK_YEAR);
+
+      int companyIdColumnIndex = cursor.getColumnIndex(Utils.TABLE_COMPANY_ID);
+      int companyNameColumnIndex = cursor.getColumnIndex(Utils.TABLE_COMPANY_NAME);
+
+      int authorIdColumnIndex = cursor.getColumnIndex(Utils.TABLE_AUTHOR_ID);
+      int authorNameColumnIndex = cursor.getColumnIndex(Utils.TABLE_AUTHOR_NAME);
+      int authorYearColumnIndex = cursor.getColumnIndex(Utils.TABLE_AUTHOR_YEAR);
+
+      do {
+
+        int bookId = cursor.getInt(bookIdColumnIndex);
+        String bookName = cursor.getString(bookNameColumnIndex);
+        int bookYear = cursor.getInt(bookYearColumnIndex);
+
+        int companyId = cursor.getInt(companyIdColumnIndex);
+        String companyName = cursor.getString(companyNameColumnIndex);
+
+        int authorId = cursor.getInt(authorIdColumnIndex);
+        String authorName = cursor.getString(authorNameColumnIndex);
+        int authorYearOld = cursor.getInt(authorYearColumnIndex);
+
+        tempAuthor = new Author(authorId, authorName, authorYearOld);
+        tempCompany = new Company(companyId, companyName);
+        tempBook = new BookAdvanced(bookId, bookName, tempAuthor, tempCompany, bookYear);
+        bookList.add(tempBook);
+
+      } while (cursor.moveToNext());
+    } else {
+      Log.i(Utils.LOG_TAG, "getFullBook: There is no matches in book...");
+    }
+    return bookList;
+  }
+
+  public BookAdvanced getFullBookById(int book_id) {
+
+    BookAdvanced tempBook = new BookAdvanced();
+    Author tempAuthor;
+    Company tempCompany;
+
+    SQLiteDatabase db = getHelper().getReadableDatabase();
     @SuppressLint("DefaultLocale") String query = String.format(
         "select " +
             "\n%s.%s, " +
@@ -212,8 +249,6 @@ public class BookDAO extends BaseDAO {
       Log.i(Utils.LOG_TAG, "getFullBook: There is no matches in book...");
       tempBook = null;
     }
-   // Log.i(Utils.LOG_TAG, "getFullBook: " + tempBook.getBookAndvencadInfo());
-
     return tempBook;
   }
 

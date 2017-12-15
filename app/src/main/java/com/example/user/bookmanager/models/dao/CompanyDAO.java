@@ -49,9 +49,9 @@ public class CompanyDAO extends BaseDAO {
   }
 
 
-  public List<Company> getAllCompanyes() {
+  public ArrayList<Company> getAllCompanyes() {
     dataBase = getHelper().getWritableDatabase();
-    List<Company> companyList = new ArrayList<>();
+    ArrayList<Company> companyList = new ArrayList<>();
     Company temp;
     try {
       Cursor cursor = dataBase.query(Utils.TABLE_COMPANY, null, null, null, null, null, null);

@@ -4,4 +4,10 @@
   <string name="btn_companyes">Companyes</string>
   <string name="btn_authors">Authors</string>
   <string name="btn_find">Find</string>
+  <string name="default_id">1</string>
+  <string name="default_name">default name</string>
+  <string name="default_years">default years old</string>
+  <string name="default_book_author">default_book_author</string>
+  <string name="default_book_company">default_book_company</string>
+  <string name="default_book_years">default_book_years</string>
 </resources>
