@@ -5,27 +5,26 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  tools:context=".views.MainActivity">
+  tools:context=".views.activityes.MainActivity">
 
-  <LinearLayout
-    style="@style/ListView"
+  <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="?android:selectableItemBackground">
     <TextView
       android:id="@+id/tvCompanyId"
-      style="@style/ListView.Item"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:text="@string/default_id"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"/>
+      android:textSize="18sp"/>
     <TextView
-      android:text="@string/default_name"
       android:id="@+id/tvCompanyName"
-      style="@style/ListView.Item"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"/>
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="100dp"
+      android:text="@string/default_name"
+      android:textSize="18sp"/>
 
-
-  </LinearLayout>
-
-
+  </RelativeLayout>
 </LinearLayout>

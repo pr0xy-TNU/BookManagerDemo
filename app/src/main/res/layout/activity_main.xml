@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  tools:context=".views.MainActivity">
+  tools:context=".views.activityes.MainActivity">
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -32,14 +32,25 @@
   </LinearLayout>
   <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
     android:layout_gravity="center">
     <ListView
       android:id="@+id/lvMainActivity"
       android:layout_width="match_parent"
-      android:layout_height="400dp">
+      android:layout_height="wrap_content">
 
     </ListView>
+    <fragment
+      android:id="@+id/fBookResponse"
+      android:layout_width="wrap_content"
+      android:name="com.example.user.bookmanager.views.fragments.BookQueryFragment"
+      android:layout_height="wrap_content"
+      tools:layout="@layout/book_fragment"
+      >
+
+    </fragment>
   </LinearLayout>
   <LinearLayout
     android:layout_width="match_parent"

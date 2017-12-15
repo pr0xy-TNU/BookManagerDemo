@@ -61,7 +61,6 @@ public class BookAdapter extends BaseAdapter {
         .setText(String.valueOf(bookAdvanced.getCompany().getCompanyInfo()));
     ((TextView) tempView.findViewById(R.id.tvBookYear))
         .setText(String.valueOf(bookAdvanced.getBookYear()));
-
     return tempView;
   }
 
