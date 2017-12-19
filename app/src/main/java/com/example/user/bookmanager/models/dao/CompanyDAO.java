@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Log;
 import com.example.user.bookmanager.models.entityes.Company;
 import com.example.user.bookmanager.utils.Utils;
@@ -95,4 +96,41 @@ public class CompanyDAO extends BaseDAO {
     return tempCompany;
   }
 
+
+  public Cursor getCompanyCursor() {
+    String query = String
+        .format("select %s as _id, %s from %s", Utils.TABLE_COMPANY_ID, Utils.TABLE_COMPANY_NAME,
+            TABLE_COMPANY);
+    return getHelper().getReadableDatabase().rawQuery(query, null);
+  }
+
+  @SuppressLint("Recycle")
+  public Cursor fetchingByCompanyName(String userRequest) {
+    Cursor tempCursor = null;
+
+    if (userRequest == null || userRequest.length() == 0) {
+      tempCursor = getCompanyCursor();
+    } else {
+      String[] requiredColumns = new String[]{
+          Utils.TABLE_COMPANY_ID + " as _id",
+          Utils.TABLE_COMPANY_NAME,
+      };
+      tempCursor = getHelper()
+          .getReadableDatabase()
+          .query(true,
+              Utils.TABLE_COMPANY,
+              requiredColumns,
+              Utils.TABLE_COMPANY_NAME + " like '%" + userRequest + "%'",
+              null,
+              null,
+              null,
+              null,
+              null
+          );
+      if (tempCursor != null) {
+        tempCursor.moveToFirst();
+      }
+    }
+    return tempCursor;
+  }
 }

@@ -1,6 +1,8 @@
 package com.example.user.bookmanager.views.fragments;
 
 import android.app.Fragment;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,7 +14,7 @@ import com.example.user.bookmanager.R;
  * Created by user on 15.12.17.
  */
 
-public class BookQueryFragment extends Fragment {
+public class BookFragment extends Fragment implements LoaderCallbacks{
 
   @Nullable
   @Override
@@ -24,4 +26,18 @@ public class BookQueryFragment extends Fragment {
   }
 
 
+  @Override
+  public Loader onCreateLoader(int id, Bundle args) {
+    return null;
+  }
+
+  @Override
+  public void onLoadFinished(Loader loader, Object data) {
+
+  }
+
+  @Override
+  public void onLoaderReset(Loader loader) {
+
+  }
 }

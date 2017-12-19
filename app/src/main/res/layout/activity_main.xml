@@ -7,70 +7,7 @@
   android:orientation="vertical"
   tools:context=".views.activityes.MainActivity">
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="top">
-    <Button
-      android:id="@+id/btnShowAuthors"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:text="@string/btn_authors"/>
-    <Button
-      android:id="@+id/btnShowCompanyes"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:text="@string/btn_companyes"/>
-    <Button
-      android:id="@+id/btnShowBooks"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:text="@string/btn_books"/>
-  </LinearLayout>
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:orientation="vertical"
-    android:layout_gravity="center">
-    <ListView
-      android:id="@+id/lvMainActivity"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
 
-    </ListView>
-    <fragment
-      android:id="@+id/fBookResponse"
-      android:layout_width="wrap_content"
-      android:name="com.example.user.bookmanager.views.fragments.BookQueryFragment"
-      android:layout_height="wrap_content"
-      tools:layout="@layout/book_fragment"
-      >
 
-    </fragment>
-  </LinearLayout>
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom">
-    <TextView
-      android:layout_width="100dp"
-      android:layout_height="wrap_content"
-      android:text="Search"
-      android:textSize="24sp"/>
-    <EditText
-      android:id="@+id/tvFindField"
-      android:layout_width="200dp"
-      android:layout_height="wrap_content"
-      android:inputType="numberDecimal"/>
-    <Button
-      android:id="@+id/btnFind"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/btn_find"/>
-  </LinearLayout>
 
 </LinearLayout>

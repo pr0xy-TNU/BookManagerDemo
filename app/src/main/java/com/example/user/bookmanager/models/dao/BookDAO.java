@@ -20,6 +20,7 @@ import java.util.List;
 
 public class BookDAO extends BaseDAO {
 
+
   public BookDAO(Context context) {
     super(context);
   }
@@ -252,4 +253,72 @@ public class BookDAO extends BaseDAO {
     return tempBook;
   }
 
+  public Cursor getBookCursorAdapter() {
+    @SuppressLint("DefaultLocale") String query = String.format(
+        "select " +
+            "\n%s.%s as _id, " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s, " +
+            "\n%s.%s  "
+            + "\nfrom %s \n"
+            + "inner join %s on %s.%s = %s.%s\n"
+            + "inner join %s on %s.%s = %s.%s\n",
+        Utils.TABLE_BOOK, Utils.TABLE_BOOK_ID,
+        Utils.TABLE_BOOK, Utils.TABLE_BOOK_NAME,
+        Utils.TABLE_BOOK, Utils.TABLE_BOOK_YEAR,
+        Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_NAME,
+        Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_ID,
+        Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_NAME,
+        Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_ID,
+        Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_YEAR,
+        Utils.TABLE_BOOK,
+        Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_ID, Utils.TABLE_BOOK,
+        Utils.TABLE_BOOK_FK_AUTHOR,
+        Utils.TABLE_COMPANY, Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_ID, Utils.TABLE_BOOK,
+        Utils.TABLE_BOOK_FK_COMPANY
+    );
+
+    return getHelper().getReadableDatabase().rawQuery(query, null);
+  }
+
+
+  public Cursor fetchingByBookName(String userRequest) {
+    Cursor cursor = null;
+    if (userRequest == null || userRequest.length() == 0) {
+      cursor = getBookCursorAdapter();
+    } else {
+      String query = String.format(
+          "select " +
+              "\n%s.%s as _id, " +
+              "\n%s.%s, " +
+              "\n%s.%s, " +
+              "\n%s.%s, " +
+              "\n%s.%s  "
+              + "\nfrom %s \n"
+              + "inner join %s on %s.%s = %s.%s\n"
+              + "inner join %s on %s.%s = %s.%s\n"
+          ,
+          Utils.TABLE_BOOK, Utils.TABLE_BOOK_ID,
+          Utils.TABLE_BOOK, Utils.TABLE_BOOK_NAME,
+          Utils.TABLE_BOOK, Utils.TABLE_BOOK_YEAR,
+          Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_NAME,
+          Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_NAME,
+          Utils.TABLE_BOOK,
+          Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR_ID, Utils.TABLE_BOOK,
+          Utils.TABLE_BOOK_FK_AUTHOR,
+          Utils.TABLE_COMPANY, Utils.TABLE_COMPANY, Utils.TABLE_COMPANY_ID, Utils.TABLE_BOOK,
+          Utils.TABLE_BOOK_FK_COMPANY
+      );
+      query += "\nwhere " + Utils.TABLE_BOOK_NAME + " like '%" + userRequest + "%'";
+      cursor = getHelper().getReadableDatabase().rawQuery(query, null);
+    }
+    if (cursor != null) {
+      cursor.moveToFirst();
+    }
+    return cursor;
+  }
 }

@@ -1,41 +1,36 @@
 package com.example.user.bookmanager.views.activityes;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.database.Cursor;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import com.example.user.bookmanager.R;
-import com.example.user.bookmanager.adapters.AuthorAdapter;
-import com.example.user.bookmanager.adapters.BookAdapter;
-import com.example.user.bookmanager.adapters.CompanyAdapter;
+import com.example.user.bookmanager.adapters.cursor.AuthorCursorAdapter;
+import com.example.user.bookmanager.adapters.cursor.BookCursorAdapter;
+import com.example.user.bookmanager.adapters.cursor.CompanyCursorAdaptor;
 import com.example.user.bookmanager.models.dao.AuthorDAO;
 import com.example.user.bookmanager.models.dao.BookDAO;
 import com.example.user.bookmanager.models.dao.CompanyDAO;
 import com.example.user.bookmanager.models.entityes.Author;
-import com.example.user.bookmanager.models.entityes.Book;
-import com.example.user.bookmanager.models.entityes.BookAdvanced;
-import com.example.user.bookmanager.models.entityes.Company;
 import com.example.user.bookmanager.utils.Utils;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
-  private List<Book> mBookList;
-  private List<Author> mAuthorList;
-  private List<Company> mCompanyList;
-
-  private Random mRandom = new Random();
 
   private AuthorDAO mAuthorDAO;
   private CompanyDAO mCompanyDAO;
@@ -44,14 +39,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
   private Button mButtonCompany;
   private Button mButtonAuthor;
   private Button mButtonBook;
-  private Button mButtonFind;
 
-  private EditText mEtFindFiled;
-
-
+  private EditText mEtUserFilter;
   private ListView mListView;
 
   private FragmentManager mFragmentManager;
+  private FragmentTransaction mFragmentTransaction;
+  private BaseAdapter templateAdaptor;
+  private ArrayAdapter<String> arrayAdapter;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +61,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     mButtonCompany = findViewById(R.id.btnShowCompanyes);
     mButtonAuthor = findViewById(R.id.btnShowAuthors);
     mButtonBook = findViewById(R.id.btnShowBooks);
-    mEtFindFiled = findViewById(R.id.tvFindField);
-    mButtonFind = findViewById(R.id.btnFind);
+    mEtUserFilter = findViewById(R.id.tvUserFilter);
     mListView = findViewById(R.id.lvMainActivity);
 
     mButtonCompany.setOnClickListener(this);
     mButtonBook.setOnClickListener(this);
     mButtonAuthor.setOnClickListener(this);
-    mButtonFind.setOnClickListener(this);
     mFragmentManager = getFragmentManager();
 
 
@@ -82,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     Log.i(Utils.LOG_TAG, massage);
   }
 
-  public void initData() {
+ /* public void initData() {
     Author tempAuthor;
     Book tempBook;
     Company tempCompany;
@@ -102,58 +96,97 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
       mAuthorList.add(tempAuthor);
       mCompanyList.add(tempCompany);
     }
-  }
+  }*/
 
+  @RequiresApi(api = VERSION_CODES.N)
   @Override
   public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btnShowCompanyes:
-        mListView.setVisibility(View.VISIBLE);
-        ArrayList<Company> tempCompanyList = mCompanyDAO.getAllCompanyes();
-        CompanyAdapter companyAdapter = new CompanyAdapter(this, tempCompanyList);
-        mListView.setAdapter(companyAdapter);
+        CompanyCursorAdaptor companyCursorAdaptor = new CompanyCursorAdaptor(this,
+            mCompanyDAO.getCompanyCursor());
+
+        mListView.setAdapter(companyCursorAdaptor);
+
+        /**
+         * life search for Companies
+         */
+        mEtUserFilter.addTextChangedListener(new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+          }
+
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {
+            companyCursorAdaptor.getFilter().filter(s.toString());
+          }
+
+          @Override
+          public void afterTextChanged(Editable s) {
+
+          }
+        });
+        companyCursorAdaptor.setFilterQueryProvider(
+            constraint -> mCompanyDAO.fetchingByCompanyName(constraint.toString()));
+
         break;
 
       case R.id.btnShowAuthors:
-        mListView.setVisibility(View.VISIBLE);
+        mEtUserFilter.setText("");
+        AuthorCursorAdapter authorCursorAdapter = new AuthorCursorAdapter(this,
+            mAuthorDAO.getAuthorCursor());
+        mListView.setAdapter(authorCursorAdapter);
+        mEtUserFilter.addTextChangedListener(new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        ArrayList<Author> tempAuthorList = mAuthorDAO.getAllAuthors();
-        AuthorAdapter authorAdapter = new AuthorAdapter(this, tempAuthorList);
-        mListView.setAdapter(authorAdapter);
+          }
+
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {
+            authorCursorAdapter.getFilter().filter(s.toString());
+          }
+
+          @Override
+          public void afterTextChanged(Editable s) {
+
+          }
+        });
+        authorCursorAdapter.setFilterQueryProvider(
+            constraint -> mAuthorDAO.fetchingByAuthorName(constraint.toString()));
+
         break;
 
       case R.id.btnShowBooks:
-        mListView.setVisibility(View.VISIBLE);
-        ArrayList<BookAdvanced> tempBookListBookList = mBookDAO.getAllFullBooks();
-        for (BookAdvanced item : tempBookListBookList) {
-          log(item.getBookAndvencadInfo());
-        }
-        BookAdapter adapter = new BookAdapter(this, mBookDAO.getAllFullBooks());
-        mListView.setAdapter(adapter);
-
-        break;
-
-      case R.id.btnFind:
-        if (TextUtils.isEmpty(mEtFindFiled.getText())) {
-          Toast.makeText(getApplicationContext(), "Цифру вводить будем???", Toast.LENGTH_SHORT)
-              .show();
-        } else {
-          int bookId = Integer.parseInt(mEtFindFiled.getText().toString());
-          mEtFindFiled.setText("");
-          BookAdvanced bookAdvanced = mBookDAO.getFullBookById(bookId);
-          if (bookAdvanced == null) {
-            log(Utils.DATABASE_NO_SUCH_RECORD);
-          } else {
-            log(bookAdvanced.getBookAndvencadInfo());
+        mEtUserFilter.setText("");
+        BookCursorAdapter bookCursorAdapter = new BookCursorAdapter(this,
+            mBookDAO.getBookCursorAdapter());
+        mListView.setAdapter(bookCursorAdapter);
+        mEtUserFilter.addTextChangedListener(new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
           }
-          Fragment response = mFragmentManager.findFragmentById(R.id.fBookResponse);
-          mListView.setVisibility(View.INVISIBLE);
-          ((TextView) response.getView().findViewById(R.id.tvResponseBook))
-              .setText(bookAdvanced != null ? bookAdvanced.getBookAndvencadInfo() : null);
-        }
+
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {
+            bookCursorAdapter.getFilter().filter(s.toString());
+          }
+
+          @Override
+          public void afterTextChanged(Editable s) {
+
+          }
+        });
+        bookCursorAdapter.setFilterQueryProvider(
+            constraint -> mBookDAO.fetchingByBookName(constraint.toString()));
 
         break;
+
     }
+  }
+  public void show(ArrayList<?> list){
+
   }
 }

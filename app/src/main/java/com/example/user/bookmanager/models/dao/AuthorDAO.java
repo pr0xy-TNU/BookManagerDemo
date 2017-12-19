@@ -10,6 +10,7 @@ import com.example.user.bookmanager.models.entityes.Author;
 import com.example.user.bookmanager.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by user on 07.12.17.
@@ -92,16 +93,55 @@ public class AuthorDAO extends BaseDAO {
         .format("select * from %s where %s.%s = %d", Utils.TABLE_AUTHOR, Utils.TABLE_AUTHOR,
             Utils.TABLE_AUTHOR_ID, author_id);
     Cursor cursor = dataBase.rawQuery(sqlQuery, null);
-    if (cursor.moveToNext()){
+    if (cursor.moveToNext()) {
       int authorIdIndexColumn = cursor.getColumnIndex(Utils.TABLE_AUTHOR_ID);
       int authorNameColumnIndex = cursor.getColumnIndex(Utils.TABLE_AUTHOR_NAME);
       int authorYearIndexColumn = cursor.getColumnIndex(Utils.TABLE_AUTHOR_YEAR);
       tempAuthor.set_id(cursor.getInt(authorIdIndexColumn));
       tempAuthor.setName(cursor.getString(authorNameColumnIndex));
       tempAuthor.setYearOld(cursor.getInt(authorYearIndexColumn));
-    }else {
+    } else {
       tempAuthor = null;
     }
     return tempAuthor;
   }
+
+  public Cursor getAuthorCursor() {
+    String tempQuery = String
+        .format("select %s as _id, %s, %s from %s", Utils.TABLE_AUTHOR_ID, Utils.TABLE_AUTHOR_NAME,
+            Utils.TABLE_AUTHOR_YEAR, Utils.TABLE_AUTHOR);
+    return getHelper().getReadableDatabase().rawQuery(tempQuery, null);
+  }
+
+  public Cursor fetchingByAuthorName(String userRequest) {
+    Cursor cursor = null;
+    if (userRequest == null || userRequest.length() == 0) {
+      cursor = getAuthorCursor();
+    } else {
+      String[] requiredColumns = new String[]{
+          Utils.TABLE_AUTHOR_ID + " as _id",
+          Utils.TABLE_AUTHOR_NAME,
+          Utils.TABLE_AUTHOR_YEAR
+      };
+      cursor = getHelper()
+          .getReadableDatabase()
+          .query(true,
+              Utils.TABLE_AUTHOR,
+              requiredColumns,
+              Utils.TABLE_AUTHOR_NAME + " like '%" + userRequest + "%'",
+              null,
+              null,
+              null,
+              null,
+              null
+          );
+      if (cursor != null) {
+        cursor.moveToFirst();
+      }
+    }
+
+    return cursor;
+  }
+
+
 }
